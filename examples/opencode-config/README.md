@@ -1,0 +1,1 @@
+Open index.html locally. No key entry, model calls, account creation or payments. Builds a mergeable OpenCode configuration with INFER_API_KEY environment reference. Inspect the current catalogue and official OpenCode docs. Maintained by 1NFER.
