@@ -24,7 +24,7 @@ def estimate(model,input_tokens,output_tokens,factor=1):
  return {'estimate_available':True,'model':model,'reference_usd':format(cost,'.8f'),'discount_assumed':False,'estimate_only':True,'actual_usage_and_account_rates_apply':True}
 
 def create(local=False):
- app=FastMCP('1NFER inference discovery',host='127.0.0.1',port=18085,stateless_http=True,json_response=True,transport_security=TransportSecuritySettings(enable_dns_rebinding_protection=True,allowed_hosts=['127.0.0.1:*','localhost:*','hesoyam.business','www.hesoyam.business'],allowed_origins=['https://hesoyam.business','https://www.hesoyam.business']))
+ app=FastMCP('1NFER inference discovery',host='127.0.0.1',port=18085,stateless_http=True,json_response=True,transport_security=TransportSecuritySettings(enable_dns_rebinding_protection=True,allowed_hosts=['127.0.0.1:*','localhost:*','1nfer.net'],allowed_origins=['https://1nfer.net']))
  @app.tool(annotations={'readOnlyHint':True,'destructiveHint':False,'openWorldHint':True})
  def list_models()->dict:
   """Read exact available model identifiers and public reference rates; no generation or charge."""
@@ -40,9 +40,9 @@ def create(local=False):
  @app.tool(annotations={'readOnlyHint':True,'destructiveHint':False,'openWorldHint':False})
  def connection_recipe(framework:str)->dict:
   """Get inspectable first-party setup instructions; does not install, sign up or spend."""
-  paths={'opencode':'https://1nfer.net/downloads/setup-opencode.py','openwebui':'https://hesoyam.business/agent-kit/channels/openwebui.html','continue':'https://hesoyam.business/agent-kit/channels/continue.html','python':'https://1nfer.net/guides/crypto-inference-agents.html'}
+  paths={'opencode':'https://1nfer.net/downloads/setup-opencode.py','openwebui':'https://1nfer.net/guides/crypto-inference-agents.html','continue':'https://1nfer.net/guides/crypto-inference-agents.html','python':'https://1nfer.net/guides/crypto-inference-agents.html'}
   if framework not in paths:raise ValueError('Supported: opencode, openwebui, continue, python')
-  return {'framework':framework,'base_url':'https://1nfer.net/v1','guide':paths[framework],'signup':'https://1nfer.net/?utm_source=mcp&utm_medium=tool&utm_campaign='+framework,'business':'https://hesoyam.business/router','key_requirement':'Save your own key privately before registration. Never send it to this public MCP.','no_free_model':True,'full_framework_runtime_verified':False,'tools_route_previously_verified':'claude-sonnet-4-6','responses_supported':False}
+  return {'framework':framework,'base_url':'https://1nfer.net/v1','guide':paths[framework],'signup':'https://1nfer.net/?utm_source=mcp&utm_medium=tool&utm_campaign='+framework,'business':'https://1nfer.net/guides/launch-your-service.html','key_requirement':'Save your own key privately before registration. Never send it to this public MCP.','no_free_model':True,'full_framework_runtime_verified':False,'tools_route_previously_verified':'claude-sonnet-4-6','responses_supported':False}
  if local:
   directory=Path(os.environ.get('INFER_STATE_DIR',str(Path.home()/'.config/1nfer-client')));directory.mkdir(parents=True,exist_ok=True,mode=0o700)
   if directory.is_symlink() or directory.stat().st_uid!=os.getuid() or directory.stat().st_mode&0o077:raise ValueError('Local state must be private and owned by you')
