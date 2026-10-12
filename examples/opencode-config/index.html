@@ -1,0 +1,18 @@
+<!doctype html><html lang="en"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OpenCode endpoint config builder · 1NFER</title>
+<style>body{font:18px system-ui;background:#101622;color:#edf2ff;max-width:760px;margin:4rem auto;padding:24px}a{color:#86b8ff}input,button,textarea{box-sizing:border-box;font:inherit;padding:14px;border-radius:10px;border:1px solid #465473;background:#1c2638;color:inherit}input,textarea{width:100%;margin:12px 0}button{cursor:pointer}textarea{min-height:300px}p{line-height:1.6}</style>
+<h1>Connect OpenCode to an OpenAI-compatible endpoint</h1>
+<p>This tool is maintained by 1NFER. It builds a configuration locally, without an API key, account creation or paid API calls.</p>
+<label for="model">Exact model ID from the live catalogue</label><input id="model" maxlength="120" placeholder="Paste a verified model ID">
+<button id="build">Build configuration</button><p id="status" role="status"></p>
+<textarea id="output" readonly aria-label="Generated configuration"></textarea>
+<button id="copy">Copy configuration</button>
+<p>Merge into your existing <code>opencode.json</code>; do not overwrite unrelated settings. Set <code>INFER_API_KEY</code> locally using your OS secret mechanism. This tool never asks for it. Select the model in OpenCode; tool support and full framework compatibility need a useful authorized test.</p>
+<p><a href="https://1nfer.net/?utm_source=hf_space&amp;utm_medium=tool&amp;utm_campaign=opencode_config">1NFER: key-only signup and crypto funding</a> · <a href="https://opencode.ai/docs/providers/">Official OpenCode instructions</a> · <a href="https://1nfer.net/llms.txt">Live API instructions</a></p>
+<p>Inference is paid. Inspect current model rates, payment networks and confirmation conditions before funding. No automatic payments, free-model promise or investment entitlement.</p>
+<script>
+const model=document.getElementById('model'),out=document.getElementById('output'),status=document.getElementById('status');
+document.getElementById('build').onclick=()=>{const id=model.value.trim();if(!/^[A-Za-z0-9][A-Za-z0-9_.:/-]{0,119}$/.test(id)||/^(hs-live-|sk-|ghp_|github_pat_)/i.test(id)){out.value='';status.textContent='Enter a model ID, never a credential.';return;}out.value=JSON.stringify({$schema:'https://opencode.ai/config.json',provider:{'1nfer':{npm:'@ai-sdk/openai-compatible',name:'1NFER',options:{baseURL:'https://1nfer.net/v1',apiKey:'{env:INFER_API_KEY}'},models:{[id]:{name:id}}}}},null,2);status.textContent='Configuration generated locally. No API calls were made.';};
+document.getElementById('copy').onclick=async()=>{if(!out.value)return;try{await navigator.clipboard.writeText(out.value);status.textContent='Copied.';}catch(e){out.focus();out.select();status.textContent='Select and copy the configuration.';}};
+</script></html>
